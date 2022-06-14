@@ -1,0 +1,33 @@
+.show_modal_remove {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 500;
+  background-color: #39393987;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  color: white;
+}
+
+.hidden_modal_remove {
+  display: none;
+}
+
+.modal_container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(90deg, #112a49 0%, #516c7f 100%);
+  width: 350px;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.btn_container {
+  display: flex;
+}
