@@ -20,10 +20,10 @@ export const createAnimalController = (data) => {
   return newAnimal
     .save()
     .then((updatedAnimal) => {
-      console.log("RESULT", updatedAnimal);
       return updatedAnimal;
     })
     .catch((error) => {
+      console.log(error);
       throw new Error(error.message);
     });
 };
@@ -31,7 +31,6 @@ export const createAnimalController = (data) => {
 export const updateAnimalController = (id, data) => {
   return Animal.findByIdAndUpdate(id, data, { new: true })
     .then((updatedAnimal) => {
-      console.log(updatedAnimal);
       return updatedAnimal;
     })
     .catch((error) => {
@@ -43,7 +42,6 @@ export const updateAnimalController = (id, data) => {
 export const deleteAnimalController = (id) => {
   return Animal.findByIdAndDelete(id)
     .then((deletedAnimal) => {
-      console.log("DELETED", deletedAnimal);
       return deletedAnimal;
     })
     .catch((error) => {

@@ -1,16 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { setUserInfo } from "../../redux/reducer";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../../components/Button";
 
-import styles from "./login.module.css";
+import styles from "./register.module.css";
 
-function Login() {
-  const dispatch = useDispatch();
+function Register() {
   const [input, setInput] = useState({ email: "", password: "" });
 
   const navigate = useNavigate();
@@ -21,28 +18,24 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const { email, password } = input;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((firebaseResp) => {
-        fetch("http://localhost:3001/user/auth", {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((resp) => {
+        const payload = {
+          email,
+          uid: resp.user.uid,
+        };
+        fetch("http://localhost:3001/user", {
+          method: "POST",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: firebaseResp.user.uid,
           },
-        })
-          .then((resp) => resp.json())
-          .then((data) => {
-            if (data.error) {
-              throw new Error(data.error);
-            }
-            dispatch(setUserInfo(data));
-            navigate("/animalsRegister");
-          })
-          .catch((err) => {
-            console.error(err);
-          });
+          body: JSON.stringify(payload),
+        });
+        navigate("/");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -55,7 +48,7 @@ function Login() {
     <section className={styles.section}>
       <div className={styles.container}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <h2>Ingreso de usuario</h2>
+          <h2>Registro de usuario</h2>
           <div className={styles.input_container}>
             <label className={styles.label} htmlFor="email">
               <p className={styles.p}>Email</p>
@@ -82,16 +75,16 @@ function Login() {
               value={input.password}
             />
           </div>
-          <Button>Ingresar</Button>
+          <Button>Registrarse</Button>
         </form>
         <div>
-          <span>¿No tiene cuenta?</span>
+          <span>¿Ya tiene cuenta?</span>
           <Button
             onClick={() => {
-              navigate("/register");
+              navigate("/");
             }}
           >
-            Regístrese
+            Ingrese
           </Button>
         </div>
       </div>
@@ -99,4 +92,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

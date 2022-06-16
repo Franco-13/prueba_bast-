@@ -1,26 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
 import { removeAnimal } from "../../redux/reducer";
+
 import Button from "../Button";
 
 import styles from "./modalRemoveAnimal.module.css";
 
-function ModalRemoveAnimal({ visible, setShow }) {
+function ModalRemoveAnimal({ setShow }) {
   const dispatch = useDispatch();
+
   const detailAnimal = useSelector((state) => state.animals.detailAnimal);
+  const token = useSelector((state) => state.animals.token);
 
   const handleRemoveAnimal = () => {
-    dispatch(removeAnimal({ id: detailAnimal._id }));
+    dispatch(removeAnimal({ id: detailAnimal._id }, token));
     setTimeout(() => {
       setShow(false);
     }, 500);
   };
 
   return (
-    <div
-      className={
-        visible ? styles.show_modal_remove : styles.hidden_modal_remove
-      }
-    >
+    <div className={styles.show_modal_remove}>
       <div className={styles.modal_container}>
         <h4>
           {detailAnimal &&

@@ -5,6 +5,13 @@
   cursor: pointer;
   height: 2.5em;
   margin: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn:hover,
+.circle:hover,
+.btn_right:hover {
+  background-color: #607c1e;
 }
 
 .btn_secondary {
@@ -25,6 +32,7 @@
   border: #8db42f;
   cursor: pointer;
   height: 2.5em;
+  transition: background-color 0.3s ease-in-out;
   margin: 10px;
 }
 
@@ -38,5 +46,6 @@
   color: white;
   border: #8db42f;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
   height: 2.5em;
 }

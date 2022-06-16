@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
-import styles from "./modalForm.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { postAnimal, putAnimal } from "../../redux/reducer";
+import { postAnimal, putAnimal, resetAnimal } from "../../redux/reducer";
+import { validateInputs } from "../../helpers/validateForm";
+
 import Button from "../Button";
 import CloseIcon from "../CloseIcon";
 
-function ModalForm({ visible, setShow, updateAnimal }) {
+import styles from "./modalForm.module.css";
+
+function ModalForm({ setShow }) {
   const dispatch = useDispatch();
 
   const detailAnimal = useSelector((state) => state.animals.detailAnimal);
   const animalTypes = useSelector((state) => state.animals.animalTypesInfo);
   const deviceTypes = useSelector((state) => state.animals.deviceTypesInfo);
+  const token = useSelector((state) => state.animals.token);
 
   useEffect(() => {
-    if (updateAnimal) {
+    if (detailAnimal) {
       setInput(detailAnimal);
     } else {
       setInput({
@@ -25,7 +29,7 @@ function ModalForm({ visible, setShow, updateAnimal }) {
         paddock_name: "",
       });
     }
-  }, [detailAnimal, updateAnimal]);
+  }, [detailAnimal]);
 
   const [input, setInput] = useState({
     animal_type: "",
@@ -36,55 +40,55 @@ function ModalForm({ visible, setShow, updateAnimal }) {
     paddock_name: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
+    setErrors(validateInputs({ ...input, [e.target.name]: e.target.value }));
   };
 
-  const handleAnimalInputRadio = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
-    setInput({ ...input, animal_type: e.target.value });
-  };
-
-  const handleDeviceInputRadio = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
-    setInput({ ...input, device_type: e.target.value });
+  const handleCloseModal = () => {
+    if (detailAnimal) {
+      dispatch(resetAnimal());
+    }
+    setShow(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(input);
-    if (updateAnimal) {
-      dispatch(putAnimal(input, detailAnimal._id));
-      setTimeout(() => {
-        setShow(false);
-      }, 500);
+
+    const resultValidation = validateInputs(input);
+
+    if (Object.keys(resultValidation).length === 0) {
+      if (detailAnimal) {
+        dispatch(putAnimal(input, detailAnimal._id, token));
+        handleCloseModal();
+      } else {
+        dispatch(postAnimal(input, token));
+        setInput({
+          animal_type: "",
+          animal_weight: 0,
+          device_number: "",
+          device_type: "",
+          id_senasa: "",
+          paddock_name: "",
+        });
+      }
     } else {
-      dispatch(postAnimal(input));
+      setErrors(resultValidation);
     }
-    setInput({
-      animal_type: "",
-      animal_weight: 0,
-      device_number: "",
-      device_type: "",
-      id_senasa: "",
-      paddock_name: "",
-    });
   };
 
   return (
-    <div
-      className={visible ? styles.show_modal_form : styles.hidden_modal_form}
-    >
+    <div className={styles.show_modal_form}>
       <div className={styles.form_container}>
         <div className={styles.btn_close}>
-          <Button onClick={() => setShow(false)} circle={true}>
+          <Button onClick={handleCloseModal} circle={true}>
             <CloseIcon stroke="white" />
           </Button>
         </div>
         <form className={styles.form} onSubmit={handleSubmit}>
-          {updateAnimal ? null : (
+          {detailAnimal ? null : (
             <div className={styles.input_text_container}>
               <label className={styles.label} htmlFor="id_senasa">
                 <p className={styles.span}>ID</p>
@@ -95,33 +99,43 @@ function ModalForm({ visible, setShow, updateAnimal }) {
                 name="id_senasa"
                 type="text"
                 placeholder="ingrese el ID SENASA"
-                value={input.id_senasa}
+                value={input?.id_senasa}
                 onChange={handleChange}
               />
+              {errors?.id_senasa ? (
+                <span className={styles.span_error}>{errors?.id_senasa}</span>
+              ) : (
+                <span></span>
+              )}
             </div>
           )}
           <div className={styles.input_radio_container}>
-            <label className={styles.label} htmlFor="animal_type">
-              <p className={styles.span}>Tipo de animal</p>
-            </label>
-            {animalTypes?.map((animal) => (
-              <div key={animal}>
-                <input
-                  className={styles.input}
-                  id="animal_type"
-                  name="animal_type"
-                  type="radio"
-                  checked={input.animal_type === animal}
-                  value={animal}
-                  onChange={handleAnimalInputRadio}
-                />
-                <span>{animal}</span>
-              </div>
-            ))}
+            <p className={styles.span}>Tipo de animal</p>
+            <div>
+              {animalTypes?.map((animal) => (
+                <div key={animal}>
+                  <input
+                    className={styles.input}
+                    id={animal}
+                    name="animal_type"
+                    type="radio"
+                    checked={input.animal_type === animal}
+                    value={animal}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor={animal}>{animal}</label>
+                </div>
+              ))}
+            </div>
+            {errors?.animal_type ? (
+              <span className={styles.span_error}>{errors?.animal_type}</span>
+            ) : (
+              <span></span>
+            )}
           </div>
           <div className={styles.input_text_container}>
             <label className={styles.label} htmlFor="animal_weight">
-              <p className={styles.span}>Peso del animal</p>
+              <p className={styles.span}>Peso del animal (kg)</p>
             </label>
             <input
               className={styles.input}
@@ -132,6 +146,11 @@ function ModalForm({ visible, setShow, updateAnimal }) {
               value={input.animal_weight}
               onChange={handleChange}
             />
+            {errors?.animal_weight ? (
+              <span className={styles.span_error}>{errors?.animal_weight}</span>
+            ) : (
+              <span></span>
+            )}
           </div>
           <div className={styles.input_text_container}>
             <label className={styles.label} htmlFor="paddock_name">
@@ -146,25 +165,35 @@ function ModalForm({ visible, setShow, updateAnimal }) {
               value={input.paddock_name}
               onChange={handleChange}
             />
+            {errors?.paddock_name ? (
+              <span className={styles.span_error}>{errors?.paddock_name}</span>
+            ) : (
+              <span></span>
+            )}
           </div>
           <div className={styles.input_radio_container}>
-            <label className={styles.label} htmlFor="device_type">
-              <p className={styles.span}>Tipo de dispositivo</p>
-            </label>
-            {deviceTypes?.map((device) => (
-              <div key={device}>
-                <input
-                  className={styles.input}
-                  id="device_type"
-                  name="device_type"
-                  type="radio"
-                  checked={input.device_type === device}
-                  value={device}
-                  onChange={handleDeviceInputRadio}
-                />
-                <span>{device}</span>
-              </div>
-            ))}
+            <p className={styles.span}>Tipo de dispositivo</p>
+            <div>
+              {deviceTypes?.map((device) => (
+                <div key={device}>
+                  <input
+                    className={styles.input}
+                    id={device}
+                    name="device_type"
+                    type="radio"
+                    checked={input.device_type === device}
+                    value={device}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor={device}>{device}</label>
+                </div>
+              ))}
+            </div>
+            {errors?.device_type ? (
+              <span className={styles.span_error}>{errors?.device_type}</span>
+            ) : (
+              <span></span>
+            )}
           </div>
           <div className={styles.input_text_container}>
             <label className={styles.label} htmlFor="device_number">
@@ -179,8 +208,13 @@ function ModalForm({ visible, setShow, updateAnimal }) {
               value={input.device_number}
               onChange={handleChange}
             />
+            {errors?.device_number ? (
+              <span className={styles.span_error}>{errors?.device_number}</span>
+            ) : (
+              <span></span>
+            )}
           </div>
-          <Button>{updateAnimal ? "Actualizar" : "Crear"}</Button>
+          <Button>{detailAnimal ? "Actualizar" : "Crear"}</Button>
         </form>
       </div>
     </div>

@@ -1,60 +1,36 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useFetchAnimals } from "../../hooks/useFetchAnimals";
+import { useCreateAndUpdateModal } from "../../hooks/useCreateAndUpdateModal";
+import { useRemoveModal } from "../../hooks/useRemoveModal";
+import { resetSearchAnimal, searchAnimalByID } from "../../redux/reducer";
+
 import Button from "../../components/Button";
 import ModalForm from "../../components/ModalForm";
 import ModalRemoveAnimal from "../../components/ModalRemoveAnimal";
 import RemoverIcon from "../../components/RemoverIcon";
 import SearchBar from "../../components/SearchBar";
 import UpdaterIcon from "../../components/UpdaterIcon";
-import {
-  detailAnimal,
-  fetchAllAnimals,
-  fetchAnimalAndDeviceInfo,
-  resetAnimal,
-  resetSearchAnimal,
-  searchAnimalByID,
-} from "../../redux/reducer";
 
-import styles from "./paddock.module.css";
-
-const useFetchAnimals = () => {
-  const dispatch = useDispatch();
-  const animals = useSelector((state) => state.animals.list);
-
-  useEffect(() => {
-    dispatch(fetchAnimalAndDeviceInfo());
-    dispatch(fetchAllAnimals());
-  }, [dispatch]);
-
-  return { animals };
-};
+import styles from "./animalRegistry.module.css";
 
 function AnimalRegistry() {
   const { animals } = useFetchAnimals();
+
+  const {
+    handleCreateModal,
+    handleUpdateModal,
+    setShowModal,
+    showModal,
+    update,
+  } = useCreateAndUpdateModal();
+
+  const { handleRemove, setShowModalRemove, showModalRemove } =
+    useRemoveModal();
+
   const dispatch = useDispatch();
+
   const filterList = useSelector((state) => state.animals.filterList);
-
-  const [showModal, setShowModal] = useState(false);
-
-  const [update, setUpdate] = useState(false);
-
-  const handleCreateModal = () => {
-    dispatch(resetAnimal());
-    setUpdate(false);
-    setShowModal(true);
-  };
-
-  const handleUpdateModal = (id) => {
-    setUpdate(true);
-    setShowModal(true);
-    dispatch(detailAnimal(id));
-  };
-
-  const [showModalRemove, setShowModalRemove] = useState(false);
-  const handleRemove = (id) => {
-    dispatch(detailAnimal(id));
-    setShowModalRemove(true);
-  };
 
   const [search, setSearch] = useState("");
 
@@ -66,7 +42,6 @@ function AnimalRegistry() {
   };
 
   const handleSearch = () => {
-    console.log(search);
     dispatch(searchAnimalByID(search));
   };
 
@@ -100,7 +75,7 @@ function AnimalRegistry() {
           </thead>
           <tbody>
             {arrayList &&
-              arrayList.map((e) => (
+              arrayList?.map((e) => (
                 <tr key={e._id} className={styles.tr}>
                   <td className={styles.td}>{e.id_senasa}</td>
                   <td className={styles.td}>{e.animal_type}</td>
@@ -129,15 +104,8 @@ function AnimalRegistry() {
           </tbody>
         </table>
       </div>
-      <ModalForm
-        visible={showModal}
-        updateAnimal={update}
-        setShow={setShowModal}
-      />
-      <ModalRemoveAnimal
-        visible={showModalRemove}
-        setShow={setShowModalRemove}
-      />
+      {showModal && <ModalForm updateAnimal={update} setShow={setShowModal} />}
+      {showModalRemove && <ModalRemoveAnimal setShow={setShowModalRemove} />}
     </section>
   );
 }

@@ -1,4 +1,5 @@
 import Button from "../Button";
+
 import styles from "./search.module.css";
 
 function SearchBar({ handleSearch, handleChangeSearch, search }) {

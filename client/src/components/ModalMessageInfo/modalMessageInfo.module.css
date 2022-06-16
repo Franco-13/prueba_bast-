@@ -1,0 +1,30 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #2e3e5e5e;
+  position: absolute;
+  z-index: 5000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  width: 350px;
+  min-height: 200px;
+  border-radius: 0.5rem;
+  background-color: #516c7f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.btn_close {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}

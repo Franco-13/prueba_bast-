@@ -53,9 +53,19 @@
   margin-bottom: 5px;
 }
 
+.span_error {
+  margin-top: 4px;
+  padding: 3px;
+  font-size: 0.85em;
+  color: crimson;
+  font-weight: 500;
+  background-color: #ced4da;
+  border-radius: 0.25rem;
+}
+
 .input_radio_container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   margin-bottom: 10px;
   width: 100%;
 }
