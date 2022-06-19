@@ -2,53 +2,53 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { setUserInfo } from "../../redux/reducer";
+import { validateLogin } from "../../helpers/validateLogin";
 
 import Button from "../../components/Button";
 
 import styles from "./login.module.css";
 
 function Login() {
-  const dispatch = useDispatch();
   const [input, setInput] = useState({ email: "", password: "" });
-
+  const [errors, setErrors] = useState({});
+  const [firebaseErrors, setFirebaseErrors] = useState("");
   const navigate = useNavigate();
 
   const handleChange = ({ target: { name, value } }) => {
     setInput({ ...input, [name]: value });
+    setErrors(validateLogin({ ...input, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = input;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((firebaseResp) => {
-        fetch("http://localhost:3001/user/auth", {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: firebaseResp.user.uid,
-          },
+    const resultValidation = validateLogin(input);
+
+    if (Object.keys(resultValidation).length === 0) {
+      const { email, password } = input;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((firebaseResp) => {
+          console.log(firebaseResp);
         })
-          .then((resp) => resp.json())
-          .then((data) => {
-            if (data.error) {
-              throw new Error(data.error);
-            }
-            dispatch(setUserInfo(data));
-            navigate("/animalsRegister");
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
+        .catch((error) => {
+          const errorCode = error.code;
+          console.log(error);
+          if (errorCode === "auth/user-not-found") {
+            setFirebaseErrors("Usuario no registrado");
+            setTimeout(() => {
+              setFirebaseErrors("");
+            }, 1500);
+          } else if (errorCode === "auth/wrong-password") {
+            setFirebaseErrors("Contraseña incorrecta");
+            setTimeout(() => {
+              setFirebaseErrors("");
+            }, 1500);
+          }
+        });
+    } else {
+      setErrors(resultValidation);
+    }
   };
 
   return (
@@ -67,7 +67,13 @@ function Login() {
               name="email"
               onChange={handleChange}
               value={input.email}
+              title=""
             />
+            {errors?.email ? (
+              <span className={styles.span_error}>{errors?.email}</span>
+            ) : (
+              <span className={styles.empty_span}>""</span>
+            )}
           </div>
           <div className={styles.input_container}>
             <label className={styles.label} htmlFor="password">
@@ -81,7 +87,13 @@ function Login() {
               onChange={handleChange}
               value={input.password}
             />
+            {errors?.password ? (
+              <span className={styles.span_error}>{errors?.password}</span>
+            ) : (
+              <span className={styles.empty_span}>""</span>
+            )}
           </div>
+          <span className={styles.span_firebase}>{firebaseErrors}</span>
           <Button>Ingresar</Button>
         </form>
         <div>

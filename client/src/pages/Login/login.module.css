@@ -20,11 +20,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
   width: 350px;
   height: fit-content;
   position: relative;
   color: white;
+  position: relative;
 }
 
 .input_container {
@@ -63,4 +63,33 @@
   border-color: #559061;
   outline: 0;
   box-shadow: 0 0 0 0.2rem #00ff0d40;
+}
+
+.span_error {
+  margin-top: 4px;
+  padding: 3px;
+  font-size: 0.85em;
+  color: crimson;
+  font-weight: 500;
+  background-color: #ced4da;
+  border-radius: 0.25rem;
+}
+
+.empty_span {
+  color: transparent;
+  margin-top: 4px;
+  padding: 3px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.span_firebase {
+  bottom: 3.5rem;
+  position: absolute;
+  margin-top: 4px;
+  padding: 3px;
+  font-size: 0.85em;
+  color: crimson;
+  font-weight: 500;
+  border-radius: 0.25rem;
 }
