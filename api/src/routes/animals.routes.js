@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { firebaseAdmin } from "../app.js";
-import User from "../models/User.js";
+import { userAuthorization } from "../middleware/userAuthorization.js";
+/* import { firebaseAdmin } from "../app.js";
+import User from "../models/User.js"; */
 import {
   createAnimal,
   deleteAnimal,
@@ -11,7 +12,7 @@ import {
 
 const router = Router();
 
-const userAuthorization = (req, res, next) => {
+/* const userAuthorization = (req, res, next) => {
   const token = req.headers.authorization;
   firebaseAdmin
     .auth()
@@ -30,13 +31,13 @@ const userAuthorization = (req, res, next) => {
           res.status(400).json({ error: error.message });
         });
     });
-};
+}; */
 
 router.get("/", getAllAnimals);
 
 router.get("/info", getInfo);
 
-router.post("/", userAuthorization, createAnimal);
+router.post("/", createAnimal);
 
 router.put("/:id", userAuthorization, updateAnimal);
 
