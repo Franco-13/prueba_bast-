@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserInfo } from "../../redux/reducer";
+import { setUserInfo } from "../../redux/reducer/userSlice";
 
 import styles from "./navbar.module.css";
 
@@ -11,12 +11,11 @@ function Navbar() {
 
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.animals.userInfo);
+  const user = useSelector((state) => state.users.userInfo);
 
   const logout = () => {
     signOut(auth)
       .then((res) => {
-        console.log(res);
         dispatch(setUserInfo(null));
         navigate("/");
       })
@@ -38,6 +37,7 @@ function Navbar() {
             Rol:
             {user?.is_admin ? " Administrador" : " Usuario"}
           </p>
+          <p className={styles.rol_user}>Email: {user.email}</p>
           <button className={styles.btn_secondary} onClick={logout}>
             Salir
           </button>
