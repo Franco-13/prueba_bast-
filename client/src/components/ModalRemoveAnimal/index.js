@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { removeAnimal } from "../../redux/reducer";
+import { removeAnimal, setMessageInfo } from "../../redux/reducer";
 
 import Button from "../Button";
 
@@ -9,13 +9,21 @@ function ModalRemoveAnimal({ setShow }) {
   const dispatch = useDispatch();
 
   const detailAnimal = useSelector((state) => state.animals.detailAnimal);
-  const token = useSelector((state) => state.animals.token);
+  const token = useSelector((state) => state.users.token);
+  const user = useSelector((state) => state.users.userInfo);
 
   const handleRemoveAnimal = () => {
+    if (!user.is_admin) {
+      dispatch(
+        setMessageInfo({ reset: false, message: "Usuario no autorizado" })
+      );
+      setTimeout(() => {
+        setShow(false);
+      }, 500);
+      return;
+    }
+
     dispatch(removeAnimal({ id: detailAnimal._id }, token));
-    setTimeout(() => {
-      setShow(false);
-    }, 500);
   };
 
   return (
