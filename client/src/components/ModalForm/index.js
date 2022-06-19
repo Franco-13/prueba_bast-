@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postAnimal, putAnimal, resetAnimal } from "../../redux/reducer";
+import {
+  postAnimal,
+  putAnimal,
+  resetAnimal,
+  setMessageInfo,
+} from "../../redux/reducer";
 import { validateInputs } from "../../helpers/validateForm";
 
 import Button from "../Button";
@@ -14,7 +19,8 @@ function ModalForm({ setShow }) {
   const detailAnimal = useSelector((state) => state.animals.detailAnimal);
   const animalTypes = useSelector((state) => state.animals.animalTypesInfo);
   const deviceTypes = useSelector((state) => state.animals.deviceTypesInfo);
-  const token = useSelector((state) => state.animals.token);
+  const token = useSelector((state) => state.users.token);
+  const user = useSelector((state) => state.users.userInfo);
 
   useEffect(() => {
     if (detailAnimal) {
@@ -56,6 +62,12 @@ function ModalForm({ setShow }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!user.is_admin && detailAnimal) {
+      dispatch(
+        setMessageInfo({ reset: false, message: "Usuario no autorizado" })
+      );
+      return;
+    }
 
     const resultValidation = validateInputs(input);
 
