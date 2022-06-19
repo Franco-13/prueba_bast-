@@ -10,8 +10,6 @@ export const animalsSlice = createSlice({
     deviceTypesInfo: null,
     animalTypesInfo: null,
     loading: true,
-    token: "",
-    userInfo: null,
   },
   reducers: {
     setAnimalList: (state, action) => {
@@ -19,9 +17,9 @@ export const animalsSlice = createSlice({
     },
     setMessageInfo: (state, action) => {
       if (action.payload.reset) {
-        state.createMessage = "";
+        state.messageInfo = "";
       } else {
-        state.createMessage = action.payload.message;
+        state.messageInfo = action.payload.message;
       }
     },
     setDetailAnimal: (state, action) => {
@@ -48,12 +46,6 @@ export const animalsSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
-    setToken: (state, action) => {
-      state.token = action.payload;
-    },
-    setUserInfo: (state, action) => {
-      state.userInfo = action.payload;
-    },
   },
 });
 
@@ -68,8 +60,6 @@ export const {
   resetSearchAnimal,
   setAnimalAndDeviceInfo,
   setLoading,
-  setToken,
-  setUserInfo,
 } = animalsSlice.actions;
 
 export const setLoadingStatus = (payload) => {
@@ -78,22 +68,10 @@ export const setLoadingStatus = (payload) => {
   };
 };
 
-export const tokenStatus = (payload) => {
-  return function (dispatch) {
-    dispatch(setToken(payload));
-  };
-};
-
-export const userStatus = (payload) => {
-  return function (dispatch) {
-    dispatch(setUserInfo(payload));
-  };
-};
-
 export const fetchAllAnimals = () => {
   return function (dispatch) {
     dispatch(setLoadingStatus(true));
-    return fetch("http://localhost:3001/animal", {
+    return fetch(`${process.env.REACT_APP_API}/animal`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -114,7 +92,7 @@ export const fetchAllAnimals = () => {
 
 export const fetchAnimalAndDeviceInfo = () => {
   return function (dispatch) {
-    return fetch("http://localhost:3001/animal/info", {
+    return fetch(`${process.env.REACT_APP_API}/animal/info`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -130,7 +108,7 @@ export const fetchAnimalAndDeviceInfo = () => {
 export const postAnimal = (payload, token) => {
   return function (dispatch) {
     dispatch(setLoadingStatus(true));
-    return fetch("http://localhost:3001/animal", {
+    return fetch(`${process.env.REACT_APP_API}/animal`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -163,7 +141,7 @@ export const postAnimal = (payload, token) => {
 
 export const putAnimal = (payload, id, token) => {
   return function (dispatch) {
-    return fetch(`http://localhost:3001/animal/${id}`, {
+    return fetch(`${process.env.REACT_APP_API}/animal/${id}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -202,7 +180,7 @@ export const putAnimal = (payload, id, token) => {
 export const removeAnimal = ({ id }, token) => {
   return function (dispatch) {
     dispatch(setLoadingStatus(true));
-    return fetch(`http://localhost:3001/animal/${id}`, {
+    return fetch(`${process.env.REACT_APP_API}/animal/${id}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
