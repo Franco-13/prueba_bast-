@@ -12,7 +12,7 @@ export const validateRegister = (input) => {
   if (input.password.length === 0) {
     error.password = "Debe ingresar una contraseña";
   } else if (input.password.length < 6) {
-    error.password = "La contraseña debe contener mínimo 6 caracteres";
+    error.password = "Contraseña demasiado corta";
   }
 
   if (input.repeat_password !== input.password) {
