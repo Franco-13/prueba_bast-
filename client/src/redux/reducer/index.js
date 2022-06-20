@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { parseErrorInfoCreateAnimal } from "../../helpers/parseInfoError";
 
 export const animalsSlice = createSlice({
   name: "animals",
@@ -128,12 +129,24 @@ export const postAnimal = (payload, token) => {
       .catch((error) => {
         dispatch(setLoadingStatus(false));
         if (error.message.includes("E11000")) {
-          dispatch(
-            setMessageInfo({
-              reset: false,
-              message: "El id ingresado ya existe.",
-            })
-          );
+          const parsedErrorInfo = parseErrorInfoCreateAnimal(error.message);
+
+          if (parsedErrorInfo.device_number?.length) {
+            dispatch(
+              setMessageInfo({
+                reset: false,
+                message: `El número de dispositivo ${parsedErrorInfo.device_number} ingresado ya existe.`,
+              })
+            );
+            return;
+          } else {
+            dispatch(
+              setMessageInfo({
+                reset: false,
+                message: `El id senasa ${parsedErrorInfo._id} ingresado ya existe.`,
+              })
+            );
+          }
         }
       });
   };
