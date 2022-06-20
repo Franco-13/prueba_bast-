@@ -24,6 +24,9 @@ function ModalRemoveAnimal({ setShow }) {
     }
 
     dispatch(removeAnimal({ id: detailAnimal._id }, token));
+    setTimeout(() => {
+      setShow(false);
+    }, 500);
   };
 
   return (
