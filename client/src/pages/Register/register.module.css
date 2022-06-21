@@ -92,3 +92,22 @@
   font-weight: 500;
   border-radius: 0.25rem;
 }
+
+.overflow_form {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .section {
+    height: auto;
+  }
+
+  .container {
+    margin-top: 5em;
+  }
+
+  .overflow_form {
+    overflow-y: auto;
+    height: 50vh;
+  }
+}

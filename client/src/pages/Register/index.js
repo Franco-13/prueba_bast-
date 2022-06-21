@@ -72,64 +72,66 @@ function Register() {
       <div className={styles.container}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <h2>Registro de usuario</h2>
-          <div className={styles.input_container}>
-            <label className={styles.label} htmlFor="email">
-              <p className={styles.p}>Email</p>
-            </label>
-            <input
-              className={styles.input}
-              placeholder="ejemplo@mail.com"
-              type="email"
-              name="email"
-              onChange={handleChange}
-              value={input.email}
-            />
-            {errors?.email ? (
-              <span className={styles.span_error}>{errors?.email}</span>
-            ) : (
-              <span className={styles.empty_span}>""</span>
-            )}
+          <div className={styles.overflow_form}>
+            <div className={styles.input_container}>
+              <label className={styles.label} htmlFor="email">
+                <p className={styles.p}>Email</p>
+              </label>
+              <input
+                className={styles.input}
+                placeholder="ejemplo@mail.com"
+                type="email"
+                name="email"
+                onChange={handleChange}
+                value={input.email}
+              />
+              {errors?.email ? (
+                <span className={styles.span_error}>{errors?.email}</span>
+              ) : (
+                <span className={styles.empty_span}>""</span>
+              )}
+            </div>
+            <div className={styles.input_container}>
+              <label className={styles.label} htmlFor="password">
+                <p className={styles.p}>Password</p>
+              </label>
+              <input
+                className={styles.input}
+                placeholder="******"
+                type="password"
+                name="password"
+                onChange={handleChange}
+                value={input.password}
+              />
+              {errors?.password ? (
+                <span className={styles.span_error}>{errors?.password}</span>
+              ) : (
+                <span className={styles.empty_span}>""</span>
+              )}
+            </div>
+            <div className={styles.input_container}>
+              <label className={styles.label} htmlFor="password">
+                <p className={styles.p}>Confirmar password</p>
+              </label>
+              <input
+                className={styles.input}
+                placeholder="******"
+                type="password"
+                name="repeat_password"
+                onChange={handleChange}
+                value={input.repeat_password}
+              />
+              {errors?.repeat_password ? (
+                <span className={styles.span_error}>
+                  {errors?.repeat_password}
+                </span>
+              ) : (
+                <span className={styles.empty_span}>""</span>
+              )}
+            </div>
+            <span className={styles.span_firebase}>{firebaseErrors}</span>
+            <Button>Registrarse</Button>
           </div>
-          <div className={styles.input_container}>
-            <label className={styles.label} htmlFor="password">
-              <p className={styles.p}>Password</p>
-            </label>
-            <input
-              className={styles.input}
-              placeholder="******"
-              type="password"
-              name="password"
-              onChange={handleChange}
-              value={input.password}
-            />
-            {errors?.password ? (
-              <span className={styles.span_error}>{errors?.password}</span>
-            ) : (
-              <span className={styles.empty_span}>""</span>
-            )}
-          </div>
-          <div className={styles.input_container}>
-            <label className={styles.label} htmlFor="password">
-              <p className={styles.p}>Confirmar password</p>
-            </label>
-            <input
-              className={styles.input}
-              placeholder="******"
-              type="password"
-              name="repeat_password"
-              onChange={handleChange}
-              value={input.repeat_password}
-            />
-            {errors?.repeat_password ? (
-              <span className={styles.span_error}>
-                {errors?.repeat_password}
-              </span>
-            ) : (
-              <span className={styles.empty_span}>""</span>
-            )}
-          </div>
-          <span className={styles.span_firebase}>{firebaseErrors}</span>
-          <Button>Registrarse</Button>
         </form>
         <div>
           <span>¿Ya tiene cuenta?</span>

@@ -17,8 +17,6 @@
 }
 
 .form_container {
-  /* width: 70%; */
-  /* height: 100%; */
   position: relative;
   justify-content: center;
   align-items: center;
@@ -35,7 +33,6 @@
   width: 280px;
   height: fit-content;
   background: linear-gradient(90deg, #112a49 0%, #516c7f 100%);
-  min-width: 250px;
   position: relative;
   color: white;
 }
@@ -45,7 +42,6 @@
   flex-direction: column;
   align-content: flex-start;
   width: 100%;
-  margin-bottom: 10px;
 }
 
 .span {
@@ -66,7 +62,7 @@
 .input_radio_container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  margin-top: 10px;
   width: 100%;
 }
 
@@ -101,4 +97,15 @@
   top: 0;
   right: 0;
   cursor: pointer;
+}
+
+.overflow_form {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .overflow_form {
+    overflow-y: scroll;
+    height: 50vh;
+  }
 }

@@ -100,133 +100,141 @@ function ModalForm({ setShow }) {
           </Button>
         </div>
         <form className={styles.form} onSubmit={handleSubmit}>
-          {detailAnimal ? null : (
-            <div className={styles.input_text_container}>
-              <label className={styles.label} htmlFor="id_senasa">
-                <p className={styles.span}>ID</p>
-              </label>
-              <input
-                className={styles.input}
-                id="id_senasa"
-                name="id_senasa"
-                type="text"
-                placeholder="ingrese el ID SENASA"
-                value={input?.id_senasa}
-                onChange={handleChange}
-              />
-              {errors?.id_senasa ? (
-                <span className={styles.span_error}>{errors?.id_senasa}</span>
+          <div className={styles.overflow_form}>
+            {detailAnimal ? null : (
+              <div className={styles.input_text_container}>
+                <label className={styles.label} htmlFor="id_senasa">
+                  <p className={styles.span}>ID</p>
+                </label>
+                <input
+                  className={styles.input}
+                  id="id_senasa"
+                  name="id_senasa"
+                  type="text"
+                  placeholder="ingrese el ID SENASA"
+                  value={input?.id_senasa}
+                  onChange={handleChange}
+                />
+                {errors?.id_senasa ? (
+                  <span className={styles.span_error}>{errors?.id_senasa}</span>
+                ) : (
+                  <span></span>
+                )}
+              </div>
+            )}
+            <div className={styles.input_radio_container}>
+              <p className={styles.span}>Tipo de animal</p>
+              <div>
+                {animalTypes?.map((animal) => (
+                  <div key={animal}>
+                    <input
+                      className={styles.input}
+                      id={animal}
+                      name="animal_type"
+                      type="radio"
+                      checked={input.animal_type === animal}
+                      value={animal}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor={animal}>{animal}</label>
+                  </div>
+                ))}
+              </div>
+              {errors?.animal_type ? (
+                <span className={styles.span_error}>{errors?.animal_type}</span>
               ) : (
                 <span></span>
               )}
             </div>
-          )}
-          <div className={styles.input_radio_container}>
-            <p className={styles.span}>Tipo de animal</p>
-            <div>
-              {animalTypes?.map((animal) => (
-                <div key={animal}>
-                  <input
-                    className={styles.input}
-                    id={animal}
-                    name="animal_type"
-                    type="radio"
-                    checked={input.animal_type === animal}
-                    value={animal}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor={animal}>{animal}</label>
-                </div>
-              ))}
+            <div className={styles.input_text_container}>
+              <label className={styles.label} htmlFor="animal_weight">
+                <p className={styles.span}>Peso del animal (kg)</p>
+              </label>
+              <input
+                className={styles.input}
+                id="animal_weight"
+                name="animal_weight"
+                type="text"
+                placeholder="ingrese el peso del animal"
+                value={input.animal_weight}
+                onChange={handleChange}
+              />
+              {errors?.animal_weight ? (
+                <span className={styles.span_error}>
+                  {errors?.animal_weight}
+                </span>
+              ) : (
+                <span></span>
+              )}
             </div>
-            {errors?.animal_type ? (
-              <span className={styles.span_error}>{errors?.animal_type}</span>
-            ) : (
-              <span></span>
-            )}
-          </div>
-          <div className={styles.input_text_container}>
-            <label className={styles.label} htmlFor="animal_weight">
-              <p className={styles.span}>Peso del animal (kg)</p>
-            </label>
-            <input
-              className={styles.input}
-              id="animal_weight"
-              name="animal_weight"
-              type="text"
-              placeholder="ingrese el peso del animal"
-              value={input.animal_weight}
-              onChange={handleChange}
-            />
-            {errors?.animal_weight ? (
-              <span className={styles.span_error}>{errors?.animal_weight}</span>
-            ) : (
-              <span></span>
-            )}
-          </div>
-          <div className={styles.input_text_container}>
-            <label className={styles.label} htmlFor="paddock_name">
-              <p className={styles.span}>Nombre del potrero</p>
-            </label>
-            <input
-              className={styles.input}
-              id="paddock_name"
-              name="paddock_name"
-              type="text"
-              placeholder="ingrese el nombre del potrero"
-              value={input.paddock_name}
-              onChange={handleChange}
-            />
-            {errors?.paddock_name ? (
-              <span className={styles.span_error}>{errors?.paddock_name}</span>
-            ) : (
-              <span></span>
-            )}
-          </div>
-          <div className={styles.input_radio_container}>
-            <p className={styles.span}>Tipo de dispositivo</p>
-            <div>
-              {deviceTypes?.map((device) => (
-                <div key={device}>
-                  <input
-                    className={styles.input}
-                    id={device}
-                    name="device_type"
-                    type="radio"
-                    checked={input.device_type === device}
-                    value={device}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor={device}>{device}</label>
-                </div>
-              ))}
+            <div className={styles.input_text_container}>
+              <label className={styles.label} htmlFor="paddock_name">
+                <p className={styles.span}>Nombre del potrero</p>
+              </label>
+              <input
+                className={styles.input}
+                id="paddock_name"
+                name="paddock_name"
+                type="text"
+                placeholder="ingrese el nombre del potrero"
+                value={input.paddock_name}
+                onChange={handleChange}
+              />
+              {errors?.paddock_name ? (
+                <span className={styles.span_error}>
+                  {errors?.paddock_name}
+                </span>
+              ) : (
+                <span></span>
+              )}
             </div>
-            {errors?.device_type ? (
-              <span className={styles.span_error}>{errors?.device_type}</span>
-            ) : (
-              <span></span>
-            )}
+            <div className={styles.input_radio_container}>
+              <p className={styles.span}>Tipo de dispositivo</p>
+              <div>
+                {deviceTypes?.map((device) => (
+                  <div key={device}>
+                    <input
+                      className={styles.input}
+                      id={device}
+                      name="device_type"
+                      type="radio"
+                      checked={input.device_type === device}
+                      value={device}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor={device}>{device}</label>
+                  </div>
+                ))}
+              </div>
+              {errors?.device_type ? (
+                <span className={styles.span_error}>{errors?.device_type}</span>
+              ) : (
+                <span></span>
+              )}
+            </div>
+            <div className={styles.input_text_container}>
+              <label className={styles.label} htmlFor="device_number">
+                <p className={styles.span}>Número del dispositivo</p>
+              </label>
+              <input
+                className={styles.input}
+                id="device_number"
+                name="device_number"
+                type="text"
+                placeholder="ingrese un número"
+                value={input.device_number}
+                onChange={handleChange}
+              />
+              {errors?.device_number ? (
+                <span className={styles.span_error}>
+                  {errors?.device_number}
+                </span>
+              ) : (
+                <span></span>
+              )}
+            </div>
+            <Button>{detailAnimal ? "Actualizar" : "Crear"}</Button>
           </div>
-          <div className={styles.input_text_container}>
-            <label className={styles.label} htmlFor="device_number">
-              <p className={styles.span}>Número del dispositivo</p>
-            </label>
-            <input
-              className={styles.input}
-              id="device_number"
-              name="device_number"
-              type="text"
-              placeholder="ingrese un número"
-              value={input.device_number}
-              onChange={handleChange}
-            />
-            {errors?.device_number ? (
-              <span className={styles.span_error}>{errors?.device_number}</span>
-            ) : (
-              <span></span>
-            )}
-          </div>
-          <Button>{detailAnimal ? "Actualizar" : "Crear"}</Button>
         </form>
       </div>
     </div>
