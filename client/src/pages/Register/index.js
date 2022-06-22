@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 
 import styles from "./register.module.css";
 import Loading from "../../components/Loading";
+import ModalMessageInfo from "../../components/ModalMessageInfo";
 
 function Register() {
   const [input, setInput] = useState({
@@ -33,10 +34,10 @@ function Register() {
 
     if (Object.keys(resultValidation).length === 0) {
       const { email, password } = input;
+      setShowLoading(true);
 
       createUserWithEmailAndPassword(auth, email, password)
         .then((resp) => {
-          setShowLoading(true);
           const payload = {
             email,
             uid: resp.user.uid,
@@ -60,6 +61,7 @@ function Register() {
             });
         })
         .catch((error) => {
+          setShowLoading(false);
           const errorCode = error.code;
 
           if (errorCode === "auth/email-already-in-use") {
@@ -136,7 +138,6 @@ function Register() {
                 <span className={styles.empty_span}>""</span>
               )}
             </div>
-            <span className={styles.span_firebase}>{firebaseErrors}</span>
             <Button>Registrarse</Button>
           </div>
         </form>
@@ -146,11 +147,15 @@ function Register() {
             onClick={() => {
               navigate("/");
             }}
+            secondary
           >
             Ingrese
           </Button>
         </div>
       </div>
+      {firebaseErrors?.length > 0 && (
+        <ModalMessageInfo infoMessage={firebaseErrors} />
+      )}
       {showLoading && <Loading />}
     </section>
   );

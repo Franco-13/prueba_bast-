@@ -7,11 +7,15 @@ import { validateLogin } from "../../helpers/validateLogin";
 import Button from "../../components/Button";
 
 import styles from "./login.module.css";
+import ModalMessageInfo from "../../components/ModalMessageInfo";
+import Loading from "../../components/Loading";
 
 function Login() {
   const [input, setInput] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [firebaseErrors, setFirebaseErrors] = useState("");
+  const [showLoading, setShowLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = ({ target: { name, value } }) => {
@@ -26,12 +30,14 @@ function Login() {
 
     if (Object.keys(resultValidation).length === 0) {
       const { email, password } = input;
-
+      setShowLoading(true);
       signInWithEmailAndPassword(auth, email, password)
         .then((firebaseResp) => {
           console.log(firebaseResp);
+          setShowLoading(false);
         })
         .catch((error) => {
+          setShowLoading(false);
           const errorCode = error.code;
           console.log(error);
           if (errorCode === "auth/user-not-found") {
@@ -94,7 +100,6 @@ function Login() {
                 <span className={styles.empty_span}>""</span>
               )}
             </div>
-            <span className={styles.span_firebase}>{firebaseErrors}</span>
             <Button>Ingresar</Button>
           </div>
         </form>
@@ -104,11 +109,16 @@ function Login() {
             onClick={() => {
               navigate("/register");
             }}
+            secondary
           >
             Regístrese
           </Button>
         </div>
       </div>
+      {firebaseErrors?.length > 0 && (
+        <ModalMessageInfo infoMessage={firebaseErrors} />
+      )}
+      {showLoading && <Loading />}
     </section>
   );
 }

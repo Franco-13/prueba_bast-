@@ -83,17 +83,6 @@
   font-weight: 500;
 }
 
-.span_firebase {
-  bottom: 3.5rem;
-  position: absolute;
-  margin-top: 4px;
-  padding: 3px;
-  font-size: 0.85em;
-  color: crimson;
-  font-weight: 500;
-  border-radius: 0.25rem;
-}
-
 .overflow_form {
   width: 100%;
 }

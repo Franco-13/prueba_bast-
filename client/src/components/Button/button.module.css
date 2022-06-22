@@ -21,6 +21,11 @@
   cursor: pointer;
   height: 2.5em;
   margin: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn_secondary:hover {
+  background-color: #8db42f;
 }
 
 .circle {
