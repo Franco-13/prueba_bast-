@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { validateRegister } from "../../helpers/validateRegister";
@@ -7,6 +7,7 @@ import { validateRegister } from "../../helpers/validateRegister";
 import Button from "../../components/Button";
 
 import styles from "./register.module.css";
+import Loading from "../../components/Loading";
 
 function Register() {
   const [input, setInput] = useState({
@@ -16,6 +17,7 @@ function Register() {
   });
   const [errors, setErrors] = useState({});
   const [firebaseErrors, setFirebaseErrors] = useState("");
+  const [showLoading, setShowLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -34,10 +36,14 @@ function Register() {
 
       createUserWithEmailAndPassword(auth, email, password)
         .then((resp) => {
+          setShowLoading(true);
           const payload = {
             email,
             uid: resp.user.uid,
           };
+
+          signOut(auth);
+
           fetch(`${process.env.REACT_APP_API}/user`, {
             method: "POST",
             headers: {
@@ -49,8 +55,9 @@ function Register() {
             .then((res) => res.json())
             .then((data) => {
               console.log("regist data", data);
+              setShowLoading(false);
+              navigate("/");
             });
-          navigate("/");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -144,6 +151,7 @@ function Register() {
           </Button>
         </div>
       </div>
+      {showLoading && <Loading />}
     </section>
   );
 }

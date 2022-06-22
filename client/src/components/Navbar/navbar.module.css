@@ -29,3 +29,13 @@
   font-weight: 500;
   margin: 0;
 }
+
+@media (max-width: 768px) {
+  .rol_user {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 15px;
+    margin: 0 10px;
+  }
+}
